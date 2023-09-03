@@ -8,7 +8,7 @@ Serves a single, hard-coded HTML file
 Single-threaded, handles one client at a time
 ## Prerequisites
 C++ compiler (e.g., g++, clang)
-UNIX-like operating system (Linux, macOS)
+UNIX-like operating system (Linux, macOS) and CMake installed
 ## Installation & Setup
 Clone the repository:
 
