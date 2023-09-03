@@ -1,24 +1,47 @@
-# RPG GAME
-First steps in developing RPG game to learn C++
+# Simple C++ Web Server
+This project is a basic example of a simple HTTP web server written in C++. It uses UNIX socket API to handle HTTP requests and responses.
 
-First i have installed CMake and SFML lib and GTest
-sudo apt-get install libsfml-dev
+## Features
+Basic socket programming with C++
+Minimal error handling
+Serves a single, hard-coded HTML file
+Single-threaded, handles one client at a time
+## Prerequisites
+C++ compiler (e.g., g++, clang)
+UNIX-like operating system (Linux, macOS)
+## Installation & Setup
+Clone the repository:
 
-```shell
-git submodule add git@github.com:google/googletest.git
-git submodule init
-git submodule update
+```bash
+git clone https://github.com/Dominik-Lamcha/Simple_http_server.git
 ```
+Navigate into the project directory:
 
-To build project go into build dir and execute make command
 
-```shell
+```bash
+cd Simple_http_server
+```
+Compile the C++ file using CMake tools:
+
+```bash
+mkdir build
+cd build
 cmake ..
 make
 ```
+Run the server:
 
-To clean build dir use 
+```bash
+./SIMPLE_HTTP_SERVER path/to/index.html
+```
 
-make clean
+## Usage
+After running the server, navigate to http://localhost:8080 in your web browser. You should see the HTML content served by the server.
 
-To run project power up its executable, same concernig tests
+## Limitations
+The server only serves a single, hard-coded HTML file.
+No support for concurrent clients. Each client must wait for the previous one to disconnect before they can be served.
+Does not fully parse incoming HTTP requests.
+Minimal error handling.
+## Contributing
+Feel free to fork this repository and contribute. Pull requests are welcome.
