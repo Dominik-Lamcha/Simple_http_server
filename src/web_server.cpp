@@ -9,6 +9,10 @@
 #include <netinet/in.h>   // socket
 #include <arpa/inet.h>    // socket
 
+const int BUFFER_SIZE = 256; // BUFFER_SIZE stores the size of the buffer
+const int MAX_CONNECTIONS = 5; // MAX_CONNECTIONS stores the maximum number of connections
+const int PORT_NUMBER = 8080; // PORT_NUMBER stores the port number
+
 // Function that prints an error message and exits the program
 void error(const char *msg) {
     perror(msg);  // perror prints the error message to stderr
@@ -27,14 +31,14 @@ std::string getHtmlResponse(const std::string& htmlFilePath) {
     
     std::string htmlContent = buffer.str(); // Get the HTML content from the string
     
-    return "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" + htmlContent; 
+    return "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" + htmlContent;  
 }
 
 // Function that runs the web server and takes in the html file path as a parameter
 void runWebServer(const std::string& htmlFilePath) {
     int sockfd, newsockfd, portno; // sockfd and newsockfd are file descriptors, portno stores the port number
     socklen_t clilen; // clilen stores the size of the address of the client
-    char buffer[256]; // buffer stores the message from the client
+    char buffer[BUFFER_SIZE]; // buffer stores the message from the client
     struct sockaddr_in serv_addr, cli_addr; // serv_addr stores the server address, cli_addr stores the client address
     int n;
 
@@ -44,7 +48,7 @@ void runWebServer(const std::string& htmlFilePath) {
     }
 
     memset((char *)&serv_addr, 0, sizeof(serv_addr)); // Clear serv_addr to 0 using memset
-    portno = 8080; // Set the port number to 8080
+    portno = PORT_NUMBER; // Set the port number to 8080
     serv_addr.sin_family = AF_INET; // Set the address family to AF_INET (IPv4) 
     serv_addr.sin_addr.s_addr = INADDR_ANY; // Set the IP address to the localhost
     serv_addr.sin_port = htons(portno); // Convert the port number to network byte order and store it in serv_addr
@@ -54,7 +58,7 @@ void runWebServer(const std::string& htmlFilePath) {
         error("ERROR on binding");
     }
 
-    listen(sockfd, 5);  // Listen for connections on the socket, allow no more than 5 connections to wait
+    listen(sockfd, MAX_CONNECTIONS);  // Listen for connections on the socket, allow no more than 5 connections to wait
     clilen = sizeof(cli_addr);  // Get the size of cli_addr
 
 
@@ -65,8 +69,8 @@ void runWebServer(const std::string& htmlFilePath) {
             error("ERROR on accept");  // Print an error message and exit the program if the connection could not be accepted
         }
 
-        memset(buffer, 0, 256);  // Clear buffer to 0 using memset
-        n = read(newsockfd, buffer, 255);  // Read the message from the client into buffer
+        memset(buffer, 0, BUFFER_SIZE);  // Clear buffer to 0 using memset
+        n = read(newsockfd, buffer, (BUFFER_SIZE-1));  // Read the message from the client into buffer
         if (n < 0) {
             error("ERROR reading from socket"); // Print an error message and exit the program if the message could not be read
         }
